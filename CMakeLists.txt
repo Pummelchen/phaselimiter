@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.23)
 project(phaselimiter LANGUAGES C CXX)
 
+set(PHASELIMITER_VERSION "261027" CACHE STRING "Phaselimiter release version")
+
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
   message(FATAL_ERROR "Use an out-of-source build: cmake -S . -B build/release")
 endif()

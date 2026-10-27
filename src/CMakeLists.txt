@@ -1,6 +1,7 @@
 # Common CLI requirements. Headers under src are shared by several tools.
 add_library(phaselimiter_cli INTERFACE)
 target_include_directories(phaselimiter_cli INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}")
+target_compile_definitions(phaselimiter_cli INTERFACE PHASELIMITER_VERSION="${PHASELIMITER_VERSION}")
 target_link_libraries(phaselimiter_cli INTERFACE bakuage gflags::gflags)
 
 add_executable(snd_file_info

@@ -148,8 +148,12 @@ private:
     std::string what_;
 };
 
+#ifndef PHASELIMITER_VERSION
+#define PHASELIMITER_VERSION "261027"
+#endif
+
 void InitializeGFlags(int *argc, char **argv[]) {
-    gflags::SetVersionString("1.0.0-oss");
+    gflags::SetVersionString(PHASELIMITER_VERSION);
 
     std::stringstream usage;
     usage << "Audio limiter and automated mastering. Processes stereo audio at 44100 Hz.\n"
