@@ -1,4 +1,4 @@
-About 3× faster than the original repository.
+This Apple Silicon speficic fork of phaselimiter is about 3× faster than the original repository. Tested on Macbook Pro M3 24GB.
 
 ## Performance improvements
 
