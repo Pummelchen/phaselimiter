@@ -33,7 +33,7 @@ still uses. GCC/libstdc++ keeps it working.
 
 The script bootstraps what is missing and then:
 
-1. Builds static Boost 1.78 and oneTBB 2023.1 **with GCC** into
+1. Builds static Boost 1.92 and oneTBB 2023.1 **with GCC** into
    `build/gcc26-deps` (the AppleClang-built archives use libc++, which is
    ABI-incompatible with libstdc++).
 2. Configures `build/gcc26` with `CMAKE_CXX_STANDARD=26`, Eigen 5 and the GCC
@@ -45,6 +45,13 @@ The script bootstraps what is missing and then:
 - `cmake/accelerate-gcc-shim/Accelerate/Accelerate.h`: GCC cannot parse
   vecLib's `vBasicOps.h` (pulled in by the real umbrella header). The shim
   includes only the vDSP/vForce/cblas/vImage headers the DSP backend uses.
+- `deps/bakuage/include/bakuage/ffmpeg.h`: Boost 1.86+ moved Process v1 under
+  `boost::process::v1`; the header selects that namespace when `BOOST_VERSION`
+  is 1.86 or newer and keeps the old path for older Boost.
+- Boost 1.92 is built with the filesystem v4 ABI. `ProjectOptions.cmake`
+  defines `BOOST_FILESYSTEM_VERSION=4` for Boost >= 1.92 and puts the Boost
+  include directory ahead of the Conda include directory (which contains an
+  older Boost).
 - `PHASELIMITER_EIGEN_INCLUDE_DIR`: the bundled Eigen 3.3 fails as C++26 with
   GCC, so the build uses Eigen >= 3.4. The cache variable defaults to a system
   Eigen when CMake can find one and otherwise to `deps/eigen`.

@@ -1,5 +1,17 @@
 add_library(phaselimiter_options INTERFACE)
 target_compile_features(phaselimiter_options INTERFACE cxx_std_11)
+# Boost headers must precede the conda include directory (which also contains
+# an older Boost). Boost.Filesystem 1.92 is built with the v4 ABI, so consumers
+# must select the same version.
+if(Boost_INCLUDE_DIRS)
+  target_include_directories(phaselimiter_options INTERFACE ${Boost_INCLUDE_DIRS})
+elseif(Boost_INCLUDE_DIR)
+  target_include_directories(phaselimiter_options INTERFACE "${Boost_INCLUDE_DIR}")
+endif()
+if(Boost_VERSION_STRING VERSION_GREATER_EQUAL 1.92)
+  target_compile_definitions(phaselimiter_options INTERFACE BOOST_FILESYSTEM_VERSION=4)
+endif()
+
 if(APPLE AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   # GCC cannot parse vecLib's vBasicOps.h, which <Accelerate/Accelerate.h>
   # includes. Use a shim that includes only the vDSP/vForce/cblas/vImage

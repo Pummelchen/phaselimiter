@@ -49,16 +49,16 @@ if [[ ! -f "$DEPS/libsndfile/lib/libsndfile.a" ]]; then
     && make -j"$JOBS" && make install)
 fi
 
-if [[ ! -f "$GCC_DEPS/boost/lib/libboost_filesystem.a" ]]; then
-  echo "==> Building static Boost 1.78 with GCC"
+if [[ ! -f "$GCC_DEPS/boost192/lib/libboost_filesystem.a" ]]; then
+  echo "==> Building static Boost 1.92 with GCC"
   mkdir -p "$SRC" "$GCC_DEPS"
-  [[ -f "$SRC/boost_1_78_0.tar.bz2" ]] || curl -sSL \
-    -o "$SRC/boost_1_78_0.tar.bz2" \
-    "https://archives.boost.io/release/1.78.0/source/boost_1_78_0.tar.bz2"
-  tar -xjf "$SRC/boost_1_78_0.tar.bz2" -C "$SRC"
-  (cd "$SRC/boost_1_78_0" \
+  [[ -f "$SRC/boost_1_92_0.tar.bz2" ]] || curl -sSL \
+    -o "$SRC/boost_1_92_0.tar.bz2" \
+    "https://archives.boost.io/release/1.92.0/source/boost_1_92_0.tar.bz2"
+  tar -xjf "$SRC/boost_1_92_0.tar.bz2" -C "$SRC"
+  (cd "$SRC/boost_1_92_0" \
     && echo "using gcc : 16 : $GXX ;" > user-config.jam \
-    && ./bootstrap.sh --prefix="$GCC_DEPS/boost" \
+    && ./bootstrap.sh --prefix="$GCC_DEPS/boost192" \
        --with-libraries=filesystem,serialization,system,math,iostreams \
     && ./b2 -j"$JOBS" --user-config="$PWD/user-config.jam" toolset=gcc-16 \
        --layout=system variant=release link=static runtime-link=shared \
@@ -81,6 +81,7 @@ fi
 
 GOMP="$("$GXX" -print-file-name=libgomp.a)"
 cmake -S . -B build/gcc26 -G Ninja \
+  -U "Boost_*" -U "boost_*" \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_C_FLAGS="" -DCMAKE_CXX_FLAGS="" \
   -DCMAKE_C_FLAGS_RELEASE="-O3 -DNDEBUG" -DCMAKE_CXX_FLAGS_RELEASE="-O3 -DNDEBUG" \
@@ -89,7 +90,8 @@ cmake -S . -B build/gcc26 -G Ninja \
   -DCMAKE_CXX_STANDARD=26 -DPHASELIMITER_WARNINGS_AS_ERRORS=OFF \
   -DPHASELIMITER_EIGEN_INCLUDE_DIR="$EIGEN" \
   -DPHASELIMITER_STATIC_BOOST=ON -DBoost_USE_STATIC_LIBS=ON \
-  "-DBOOST_ROOT=$GCC_DEPS/boost" "-DCMAKE_PREFIX_PATH=$GCC_DEPS/boost" \
+  "-DBOOST_ROOT=$GCC_DEPS/boost192" "-DBoost_DIR=$GCC_DEPS/boost192/lib/cmake/Boost-1.92.0" \
+  "-DCMAKE_PREFIX_PATH=$GCC_DEPS/boost192" \
   "-DARMADILLO_INCLUDE_DIR=$CONDA/include" \
   -DSndFile_DIR=SndFile_DIR-NOTFOUND \
   "-DSndFile_INCLUDE_DIR=$DEPS/libsndfile/include" \
