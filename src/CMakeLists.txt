@@ -27,7 +27,7 @@ add_library(classic_detector STATIC
   classic_detector/detection.cpp
   classic_detector/numpy_neighbors.cpp)
 target_include_directories(classic_detector PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
-target_include_directories(classic_detector SYSTEM PUBLIC "${PROJECT_SOURCE_DIR}/deps/eigen")
+target_include_directories(classic_detector SYSTEM PUBLIC "${PHASELIMITER_EIGEN_INCLUDE_DIR}")
 target_include_directories(classic_detector PRIVATE "${PROJECT_SOURCE_DIR}/deps/picojson")
 target_link_libraries(classic_detector PUBLIC phaselimiter_options PRIVATE Boost::filesystem)
 phaselimiter_enable_warnings(classic_detector)

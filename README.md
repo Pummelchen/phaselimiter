@@ -261,6 +261,20 @@ Model preparation sorts analysis paths before PCA and HNSW insertion. The
 and worker count do not change the generated cache bytes on the same platform.
 Cross-compilation alone does not validate native execution or performance.
 
+### C++26 build
+
+The default CMake standard is now C++26. On macOS use GCC 16, which implements
+the most of C++26 (contracts, `<inplace_vector>`, `<simd>`):
+
+```sh
+./script/build_macos_gcc26.sh
+```
+
+See [docs/cxx26.md](docs/cxx26.md) for requirements, the GCC Accelerate shim,
+Eigen >= 3.4, and the measured performance trade-off versus the AppleClang
+build. The AppleClang build remains available via `build/build-macos.sh`
+(explicitly C++11).
+
 ### Native Intel Mac
 
 Use an x86-64 Miniforge installation and the same `environment/macos.yml`

@@ -1,5 +1,21 @@
 add_library(phaselimiter_options INTERFACE)
 target_compile_features(phaselimiter_options INTERFACE cxx_std_11)
+if(APPLE AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  # GCC cannot parse vecLib's vBasicOps.h, which <Accelerate/Accelerate.h>
+  # includes. Use a shim that includes only the vDSP/vForce/cblas/vImage
+  # headers the DSP backend needs, and add the nested framework path vImage
+  # lives in.
+  target_include_directories(phaselimiter_options INTERFACE
+    "${PROJECT_SOURCE_DIR}/cmake/accelerate-gcc-shim")
+  execute_process(COMMAND xcrun --show-sdk-path
+    OUTPUT_VARIABLE _phaselimiter_sdk OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET)
+  if(_phaselimiter_sdk)
+    target_compile_options(phaselimiter_options INTERFACE
+      "-F${_phaselimiter_sdk}/System/Library/Frameworks/Accelerate.framework/Frameworks")
+  endif()
+endif()
+
 target_compile_definitions(phaselimiter_options INTERFACE
   ARMA_DONT_USE_HDF5 EIGEN_DONT_PARALLELIZE OPTIM_USE_TBB cimg_display=0 cimg_use_png cimg_use_jpeg)
 

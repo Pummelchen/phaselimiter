@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Native Apple Silicon build that produces self-contained ("raw") binaries.
+# Legacy AppleClang build (C++11). For the C++26 build use
+# script/build_macos_gcc26.sh.
 #
 # Runtime results in bin/ link only macOS system libraries plus Accelerate:
 # no conda environment, no Homebrew dylibs, no rpath. The conda environment and
@@ -114,6 +115,7 @@ ln -sfn "$CONDA_PREFIX/lib/libz.a" "$STATIC_DEPS/linklib/libz.a"
 echo "==> Configuring build/static"
 "$CONDA_PREFIX/bin/cmake" -S . -B build/static -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_CXX_STANDARD=11 \
   -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
   -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 \
   -DBUILD_TESTING=ON -DPHASELIMITER_STATIC_BOOST=ON \

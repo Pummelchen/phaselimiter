@@ -26,7 +26,7 @@ add_library(phaselimiter_cmaes STATIC
   "${cmaes_source}/src/errstats.cc"
   "${cmaes_source}/src/ipopcmastrategy.cc")
 target_include_directories(phaselimiter_cmaes SYSTEM PUBLIC
-  "${cmaes_generated}" "${cmaes_source}/include" "${PROJECT_SOURCE_DIR}/deps/eigen")
+  "${cmaes_generated}" "${cmaes_source}/include" "${PHASELIMITER_EIGEN_INCLUDE_DIR}")
 target_link_libraries(phaselimiter_cmaes PRIVATE phaselimiter_options)
 target_link_libraries(phaselimiter_cmaes PUBLIC OpenMP::OpenMP_CXX)
 if(MSVC)

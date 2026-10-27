@@ -44,7 +44,7 @@ elseif(WIN32)
 endif()
 target_include_directories(phaselimiter_dependencies SYSTEM INTERFACE
   "${ARMADILLO_INCLUDE_DIR}"
-  "${PROJECT_SOURCE_DIR}/deps/eigen"
+  "${PHASELIMITER_EIGEN_INCLUDE_DIR}"
   "${PROJECT_SOURCE_DIR}/deps/CImg"
   "${PROJECT_SOURCE_DIR}/deps/libsimdpp"
   "${PROJECT_SOURCE_DIR}/deps/hnsw"
