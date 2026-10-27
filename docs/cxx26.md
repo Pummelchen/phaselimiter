@@ -67,25 +67,34 @@ The script bootstraps what is missing and then:
   loudness, max **25 LSB** difference (0.076 % FS), RMS 0.24 LSB.
 - 10 s excerpt vs AppleClang: max 1 LSB.
 
-## Performance trade-off
+## Performance
 
-GCC 16 is slower on this workload than AppleClang 21. Paired 60 s runs with the
-source-spectrum cache enabled:
+The C++26 build is essentially performance-neutral relative to the previous
+AppleClang C++11 binary. Interleaved runs with the source-spectrum cache enabled:
 
-| Compiler | Wall | CPU time |
+| Build | 20 s excerpt, median CPU (4 rounds) | 120 s paired CPU |
 |---|---:|---:|
-| AppleClang 21 (C++11) | 9.95–10.49 s | 52.9–55.9 s |
-| GCC 16 (C++26) | 11.92–12.11 s | 63.5–64.9 s |
+| AppleClang 21 (C++11) | 22.15 s | 125.9 s |
+| **GCC 16 (C++26, Boost 1.92)** | **22.20 s** | **127.8 s (+1.5 %)** |
+| GCC 16 (C++20, Boost 1.78) | 22.48 s | — |
+| GCC 16 (C++11, Boost 1.78/Eigen 3.3) | 20.38 s | — |
 
-That is roughly **15–20 % slower wall time / 20–25 % more CPU**; the limiter's
-NEON/vDSP hot loops are vectorized better by Clang. The full 8-minute run was
-152.5 s with GCC versus 121.9 s with AppleClang under different load conditions.
+So C++26 costs about **0–2 % CPU** versus the previous binary. The larger
+differences reported earlier (including a 152.5 s vs 121.9 s full-file
+comparison) were measured under different external load/thermal states and were
+not a fair A/B.
 
-If maximum speed matters more than C++26, the previous AppleClang build remains
-available:
+The one consistent effect is **GCC's own standard mode**: GCC 16 compiled as
+C++11 is about 8 % faster than the same GCC compiled as C++20/C++26. This is a
+codegen/ABI effect in the `simdpp` NEON hot loop, not an algorithm change.
+Boost 1.92 is neutral (bit-identical output, not in the hot path) and Eigen 5
+contributes only ~1–2 %.
+
+For maximum speed while keeping the old toolchain, the AppleClang or GCC C++11
+builds remain available:
 
 ```sh
-build/build-macos.sh                 # C++11, AppleClang, fastest binary
+build/build-macos.sh                 # C++11, AppleClang
 ```
 
-It passes the same 15 tests and writes the same tool names into `bin/`.
+They pass the same 15 tests and write the same tool names into `bin/`.
