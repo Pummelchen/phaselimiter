@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Legacy AppleClang build (C++11). For the C++26 build use
+# Legacy AppleClang build (C++17, required by GoogleTest 1.18). For C++26 use
 # script/build_macos_gcc26.sh.
 #
 # Runtime results in bin/ link only macOS system libraries plus Accelerate:
@@ -115,13 +115,15 @@ ln -sfn "$CONDA_PREFIX/lib/libz.a" "$STATIC_DEPS/linklib/libz.a"
 echo "==> Configuring build/static"
 "$CONDA_PREFIX/bin/cmake" -S . -B build/static -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_CXX_STANDARD=11 \
+  -DCMAKE_CXX_STANDARD=17 \
   -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
   -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 \
-  -DBUILD_TESTING=ON -DPHASELIMITER_STATIC_BOOST=ON \
+  -DBUILD_TESTING=ON -DPHASELIMITER_STATIC_BOOST=ON -DBoost_USE_STATIC_LIBS=ON \
+  -U "Boost_*" -U "boost_*" \
   -DBoost_USE_STATIC_LIBS=ON \
-  "-DBOOST_ROOT=$STATIC_DEPS/boost" \
-  "-DCMAKE_PREFIX_PATH=$STATIC_DEPS/boost" \
+  "-DBOOST_ROOT=/opt/homebrew" \
+  "-DBoost_DIR=/opt/homebrew/lib/cmake/Boost-1.92.0" \
+  "-DCMAKE_PREFIX_PATH=/opt/homebrew" \
   "-DARMADILLO_INCLUDE_DIR=$CONDA_PREFIX/include" \
   -DSndFile_DIR=SndFile_DIR-NOTFOUND \
   "-DSndFile_INCLUDE_DIR=$STATIC_DEPS/libsndfile/include" \
@@ -138,7 +140,7 @@ echo "==> Configuring build/static"
   -DOpenMP_CXX_LIB_NAMES=omp \
   "-DOpenMP_omp_LIBRARY=/opt/homebrew/opt/libomp/lib/libomp.a" \
   "-DPython3_EXECUTABLE=$CONDA_PREFIX/bin/python3" \
-  "-DCMAKE_EXE_LINKER_FLAGS=-L$STATIC_DEPS/linklib" \
+  "-DCMAKE_EXE_LINKER_FLAGS=-L$STATIC_DEPS/linklib -L/opt/homebrew/lib" \
   "-DCMAKE_IGNORE_PREFIX_PATH=/opt/homebrew;$CONDA_PREFIX"
 
 echo "==> Building with $JOBS jobs"

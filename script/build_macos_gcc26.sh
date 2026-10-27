@@ -92,7 +92,7 @@ cmake -S . -B build/gcc26 -G Ninja \
   -DPHASELIMITER_STATIC_BOOST=ON -DBoost_USE_STATIC_LIBS=ON \
   "-DBOOST_ROOT=$GCC_DEPS/boost192" "-DBoost_DIR=$GCC_DEPS/boost192/lib/cmake/Boost-1.92.0" \
   "-DCMAKE_PREFIX_PATH=$GCC_DEPS/boost192" \
-  "-DARMADILLO_INCLUDE_DIR=$CONDA/include" \
+  "-DARMADILLO_INCLUDE_DIR=/opt/homebrew/include" \
   -DSndFile_DIR=SndFile_DIR-NOTFOUND \
   "-DSndFile_INCLUDE_DIR=$DEPS/libsndfile/include" \
   "-DSndFile_LIBRARY=$DEPS/libsndfile/lib/libsndfile.a" \

@@ -61,6 +61,8 @@ function(phaselimiter_add_bundled_dependencies)
   set(GFLAGS_BUILD_SHARED_LIBS OFF)
   set(GFLAGS_BUILD_STATIC_LIBS ON)
   set(GFLAGS_BUILD_TESTING OFF)
+  # The project uses the historical google:: namespace.
+  set(GFLAGS_NAMESPACE "google;gflags" CACHE STRING "" FORCE)
   # This old gflags revision also reads unprefixed parent options.
   set(project_build_testing "${BUILD_TESTING}")
   set(BUILD_TESTING OFF)

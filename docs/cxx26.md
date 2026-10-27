@@ -74,7 +74,7 @@ AppleClang C++11 binary. Interleaved runs with the source-spectrum cache enabled
 
 | Build | 20 s excerpt, median CPU (4 rounds) | 120 s paired CPU |
 |---|---:|---:|
-| AppleClang 21 (C++11) | 22.15 s | 125.9 s |
+| AppleClang 21 (previous C++11 build) | 22.15 s | 125.9 s |
 | **GCC 16 (C++26, Boost 1.92)** | **22.20 s** | **127.8 s (+1.5 %)** |
 | GCC 16 (C++20, Boost 1.78) | 22.48 s | — |
 | GCC 16 (C++11, Boost 1.78/Eigen 3.3) | 20.38 s | — |
@@ -90,11 +90,11 @@ codegen/ABI effect in the `simdpp` NEON hot loop, not an algorithm change.
 Boost 1.92 is neutral (bit-identical output, not in the hot path) and Eigen 5
 contributes only ~1–2 %.
 
-For maximum speed while keeping the old toolchain, the AppleClang or GCC C++11
-builds remain available:
+For maximum speed while keeping the old toolchain, the AppleClang C++17 or GCC
+C++11 builds remain available:
 
 ```sh
-build/build-macos.sh                 # C++11, AppleClang
+build/build-macos.sh                 # C++17, AppleClang + Boost 1.92
 ```
 
 They pass the same 15 tests and write the same tool names into `bin/`.
