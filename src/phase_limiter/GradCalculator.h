@@ -334,7 +334,23 @@ namespace phase_limiter {
                 
                 return result;
             }
-            
+
+            // Upper bound on the memory used by cached source spectra, using the
+            // same per-context sizing as GradCore's src_cache path.
+            size_t sourceCacheBytes(int sample_rate, int max_available_freq, int oversample) const {
+                size_t total = 0;
+                for (const auto *task : tasks) {
+                    const int len = task->windowLen / oversample;
+                    const int spec_len = bakuage::CeilInt<int>(
+                        std::min<int>(len + 2,
+                            2 * std::ceil((double)len * max_available_freq / sample_rate + 1)),
+                        2 * SimdType::length);
+                    const int contexts = (task->ed - task->bg) / task->windowLen;
+                    total += static_cast<size_t>(contexts) * spec_len * sizeof(typename SimdType::element_type);
+                }
+                return total;
+            }
+
         private:
             void prepareDependencies() {
                 use_dependencies_ = tasks[0]->calculator->oversample() == 1;
@@ -1041,6 +1057,11 @@ namespace phase_limiter {
             callback(1);
         }
         
+        // Estimated bytes for the optional source-spectrum cache.
+        size_t sourceCacheBytes() const {
+            return tasks->sourceCacheBytes(sample_rate_downsample_, max_available_freq_, oversample_);
+        }
+
         // for limiting_error calculation
         double CalcEvalFromProx(double _noise, double unit_eval) {
             tasks->clearCache();

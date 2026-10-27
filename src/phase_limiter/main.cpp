@@ -17,6 +17,8 @@
 #include <initializer_list>
 #include <limits>
 #include <streambuf>
+#include <cstdint>
+#include <sys/sysctl.h>
 
 #include "boost/filesystem.hpp"
 #include "boost/serialization/vector.hpp"
@@ -122,7 +124,7 @@ DEFINE_double(absolute_min_noise, 1e-6, "absolute min noise (independent from no
 DEFINE_int32(max_iter1, 100, "max optimization iteration count (outer loop)");
 DEFINE_int32(max_iter2, 400, "max optimization iteration count (inner loop)");
 
-DEFINE_bool(perf_src_cache, false, "cache source waveform FFT results (performance option)");
+DEFINE_bool(perf_src_cache, true, "cache source waveform FFT results (exact; auto-disabled when the memory estimate is too large)");
 
 DEFINE_string(ffmpeg, "ffmpeg", "ffmpeg executable path.");
 
@@ -181,6 +183,13 @@ void OutputProgression(double progression) {
 	std::cout << "progression: " << progression << std::endl;
 }
 
+std::size_t PhysicalMemoryBytes() {
+    std::int64_t bytes = 0;
+    std::size_t size = sizeof(bytes);
+    if (sysctlbyname("hw.memsize", &bytes, &size, nullptr, 0) != 0 || bytes <= 0) return 0;
+    return static_cast<std::size_t>(bytes);
+}
+
 // in-place for memory efficiency
 template <class Float>
 void PhaseLimitInplace(std::vector<Float> *wave) {
@@ -204,6 +213,27 @@ void PhaseLimitInplace(std::vector<Float> *wave) {
 
     {
         phase_limiter::GradCalculator<phase_limiter::DefaultSimdType> calculator(wave->size() / 2, limiter_sample_rate, base_sample_rate * max_avilable_normalized_freq, FLAGS_worker_count, FLAGS_noise_update_mode.c_str(), FLAGS_noise_update_min_noise, FLAGS_noise_update_initial_noise, FLAGS_noise_update_fista_enable_ratio, FLAGS_max_iter1, FLAGS_max_iter2, FLAGS_limiter_internal_oversample);
+        // The source spectrum is constant across the optimization, so caching it is
+        // exact (bit-identical output) and removes one forward FFT per block and
+        // evaluation. Cap the cache at 40% of physical memory so long inputs fall
+        // back to recomputing instead of exhausting RAM.
+        bool use_src_cache = FLAGS_perf_src_cache;
+        if (use_src_cache) {
+            const std::size_t estimate = calculator.sourceCacheBytes();
+            const std::size_t physical = PhysicalMemoryBytes();
+            const std::size_t budget = physical ? physical * 2 / 5
+                                                : static_cast<std::size_t>(2) * 1024 * 1024 * 1024;
+            if (estimate > budget) {
+                use_src_cache = false;
+                std::cerr << "source FFT cache disabled: estimated "
+                          << (estimate / (1024 * 1024)) << " MB exceeds budget "
+                          << (budget / (1024 * 1024)) << " MB" << std::endl;
+            } else {
+                std::cerr << "source FFT cache: " << (estimate / (1024 * 1024))
+                          << " MB (budget " << (budget / (1024 * 1024)) << " MB)" << std::endl;
+            }
+        }
+        phase_limiter::GradCoreSettings::GetInstance().set_src_cache(use_src_cache);
         PrintMemoryUsage();
         if (FLAGS_histogram) {
             calculator.histogram = new std::vector<int>();
