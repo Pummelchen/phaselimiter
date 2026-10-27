@@ -10,7 +10,7 @@ operation; no approximation, no fast-math, no resampling or iteration changes.
 - Read the limiter call path: `main.cpp` → `GradCalculator` → `Tasks`/`TaskGroup`
   → `GradCore` → `bakuage` FFT/vector math.
 - Profiled with `/usr/bin/sample` during the optimization loop.
-- A/B measured with the real 8-minute `D07B53F5.wav` and 60 s excerpts.
+- A/B measured with the real 8-minute `D07B53F5.wav` (tracked as `D07B53F5.wav.zip`) and 60 s excerpts.
 - Compared decoded WAV samples against the previous binary; bit-identical means
   `max |diff| == 0` over all 42,332,472 samples.
 - Ran the full CTest suite after each change (15/15).
@@ -132,5 +132,6 @@ For memory-constrained runs or benchmarking the old behaviour use
 
 ```sh
 build/build-macos.sh                 # rebuild + install bin/
+perf/prepare_reference.sh
 bin/phaselimiter --input=D07B53F5.wav --output=/tmp/out.wav --worker_count=8
 ```

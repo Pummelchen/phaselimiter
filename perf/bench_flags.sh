@@ -9,6 +9,7 @@ OUT=perf/results/flags
 mkdir -p "$OUT"
 ROUNDS="${ROUNDS:-3}"
 DUR="${DUR:-60}"
+"$REPO_ROOT/perf/prepare_reference.sh"
 
 declare -A BINS=(
   [O3]=build/static/bin/phase_limiter

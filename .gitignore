@@ -52,5 +52,6 @@ __pycache__
 
 .local-sdk
 
-# Local benchmark input
+
+# Extracted from D07B53F5.wav.zip
 /D07B53F5.wav

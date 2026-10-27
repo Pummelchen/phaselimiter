@@ -11,6 +11,7 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 WAV="${1:-D07B53F5.wav}"
+"$REPO_ROOT/perf/prepare_reference.sh"
 RESULTS="perf/results"
 PYTHON="build/conda-env/bin/python"
 mkdir -p "$RESULTS" perf/models

@@ -25,12 +25,12 @@ repository root.
 | Memory | 24 GB |
 | OS | macOS 27.2 (26B123) |
 | Toolchain | Xcode 27.1 / AppleClang 21, Swift 6.4 |
-| Input | `D07B53F5.wav`, 48 kHz stereo 16-bit, 479.96 s, 88 MB |
+| Input | `D07B53F5.wav`, 48 kHz stereo 16-bit, 479.96 s, 88 MB (tracked as `D07B53F5.wav.zip`; auto-extracted by `perf/prepare_reference.sh`) |
 | Binary | `bin/phaselimiter` (static arm64 build) |
 
 ## End-to-end baseline
 
-`bin/phaselimiter --input=D07B53F5.wav --output=/tmp/out.wav --worker_count=8`
+`perf/prepare_reference.sh && bin/phaselimiter --input=D07B53F5.wav --output=/tmp/out.wav --worker_count=8`
 (limiter only, no mastering; FFmpeg converts 48 kHz → 44.1 kHz first).
 
 | Metric | Value |
