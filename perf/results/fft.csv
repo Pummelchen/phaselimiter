@@ -1,0 +1,17 @@
+backend,n,batch,transforms_per_sec,us_per_transform,input_GBps
+cpu_complex_8t,256,512,5224489.8,0.2,5.3
+cpu_real_1t,256,512,10991134.1,0.1,11.3
+gpu_real_mpsgraph,256,512,895039.2,1.1,0.9
+gpu_real_mpsgraph_copy,256,512,1158481.1,0.9,1.2
+cpu_complex_8t,1024,512,1384094.3,0.7,5.7
+cpu_real_1t,1024,512,2575025.3,0.4,10.5
+gpu_real_mpsgraph,1024,512,897261.8,1.1,3.7
+gpu_real_mpsgraph_copy,1024,512,809432.4,1.2,3.3
+cpu_complex_8t,4096,512,271102.7,3.7,4.4
+cpu_real_1t,4096,512,588590.3,1.7,9.6
+gpu_real_mpsgraph,4096,512,407400.0,2.5,6.7
+gpu_real_mpsgraph_copy,4096,512,364878.2,2.7,6.0
+cpu_complex_8t,16384,512,61848.8,16.2,4.1
+cpu_real_1t,16384,512,126323.6,7.9,8.3
+gpu_real_mpsgraph,16384,512,100925.7,9.9,6.6
+gpu_real_mpsgraph_copy,16384,512,91628.3,10.9,6.0

@@ -1,0 +1,7 @@
+source: /usr/bin/sample phaselimiter 8 -file ...
+taken during the optimize loop of a 60 s excerpt (8 workers)
+total samples: 26818
+RealForward subtree: 20414 (76.1%)
+RealBackward subtree: 4269 (15.9%)
+FFT total: 24683 (92.0%)
+libvDSP leaf samples: 23195 (86.5%)

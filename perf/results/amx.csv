@@ -1,0 +1,5 @@
+backend,size,GFLOPS,seconds,checksum
+accelerate_sgemm,512,1508.8,0.000178,512.995
+accelerate_sgemm,1024,1090.6,0.001969,1026.005
+accelerate_sgemm,2048,1155.8,0.014864,2051.991
+accelerate_sgemm,4096,1271.5,0.108090,4103.998

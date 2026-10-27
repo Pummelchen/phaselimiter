@@ -1,0 +1,8 @@
+bench_fft
+bench_amx
+models/
+results/*.log
+results/*.time
+results/flags/*.log
+results/flags/*.time
+results/flags/*.wav

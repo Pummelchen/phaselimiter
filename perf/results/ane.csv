@@ -1,0 +1,4 @@
+compute_units,median_ms,gflops,output_sum
+CPU_ONLY,10.51,2298.2,12719.7764
+CPU_AND_NE,2.96,8169.2,12719.9219
+ALL,2.77,8732.6,12719.9219

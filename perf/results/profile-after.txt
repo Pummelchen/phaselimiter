@@ -1,0 +1,6 @@
+source: /usr/bin/sample of the optimized binary, 7 s during optimization (60 s excerpt)
+total samples: 25568
+RealForward subtree: 16199 (63.4%)
+RealBackward subtree: 3293 (12.9%)
+FFT total: 19492 (76.2%)
+libvDSP leaf samples: 13715 (53.6%)

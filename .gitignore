@@ -38,7 +38,8 @@ version.h
 *CXX_cotire.cmake
 
 /resource/sound_quality2_cache
-/build
+/build/*
+!/build/build-macos.sh
 /built
 
 # Personal CMake presets
@@ -50,3 +51,6 @@ __pycache__
 .vscode/*
 
 .local-sdk
+
+# Local benchmark input
+/D07B53F5.wav
