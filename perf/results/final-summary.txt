@@ -1,16 +1,20 @@
-phaselimiter performance work
+phaselimiter performance results
 
+Current build: C++26, GCC 16.2, Boost 1.92, latest dependencies
+  Full 8-minute file: 115.20 s wall, 503.03 s user, 3.47 s sys
+  RTF 0.240 (4.17x realtime), 4.40 effective cores
+  Peak RSS 5.25 GB; source cache estimate 2.30 GB
+  Output vs pre-upgrade GCC build: bit-identical (0 LSB)
+  Output vs AppleClang build: max 25 LSB, RMS 0.24 LSB, same peak/loudness
+  Speedup vs original complex-FFT build (381.61 s): 3.31x
+
+History:
 1) Real-FFT backend (deps/bakuage/src/dft_accelerate.cpp)
-   full 8-min file: 381.61 s -> 176.67 s (2.16x), RTF 0.795 -> 0.368
+   full 8-min file: 381.61 s -> 176.67 s (2.16x)
    60 s excerpt: 37.58 s -> 12.87 s (2.92x)
-   output: max 18 LSB difference, identical peak/loudness/iterations
 
-2) Source-spectrum cache (on by default, memory-guarded)
-   full file paired A/B: 164.15 s -> 121.93 s (1.35x), CPU 657 -> 462 s (1.42x)
-   60 s excerpt: 12.48 s -> 9.90 s; CPU 71.45 -> 51.85 s
-   output: bit-identical (0 LSB)
-   peak RSS: 1.88 GB -> 4.55 GB for the 8-min file (estimate 2.30 GB)
+2) Source-spectrum cache (default on, 40% RAM guard)
+   paired A/B: 164.15 s -> 121.93 s (1.35x), CPU 657 -> 462 s (1.42x)
+   output bit-identical
 
-Combined vs the original complex-FFT build:
-   381.61 s -> 121.93 s (3.13x wall), CPU 1797 s -> 462 s (3.89x)
-   CTest 15/15 passed; outputs identical up to real-FFT rounding.
+CTest: 15/15 passed on the final build.

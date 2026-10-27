@@ -159,6 +159,14 @@ defaults to **on**; `GradCalculator::sourceCacheBytes()` estimates the cache siz
 from the task layout, and the cache is refused with a warning if it would exceed
 40 % of physical RAM. `--perf_src_cache=false` restores the old behaviour.
 
+### Current C++26 build
+
+The final C++26/GCC 16 build (Boost 1.92, current dependencies) runs the
+8-minute reference in **115.20 s** (503.03 s CPU, RTF 0.240), which is **3.31×**
+faster than the original 381.61 s build. Its output is bit-identical to the
+previous GCC build and within 25 LSB of AppleClang, with the same peak and
+loudness. Raw values: `results/cxx26.csv`.
+
 | Full file, paired A/B | Force cache off | Cache on |
 |---|---:|---:|
 | Wall | 164.15 s | **121.93 s (1.35×)** |

@@ -1,6 +1,6 @@
 ## Performance improvements
 
-- Full 8-minute reference run reduced from 381.61 s to 121.93 s (3.13×).
+- Full 8-minute reference run reduced from 381.61 s to 115.20 s (3.31×).
 - Real-FFT backend replaces the complex FFT on real input and is 2.16× faster.
 - Exact source-spectrum cache adds a further 1.35× speedup with a 40 % RAM guard.
 - Native Accelerate and NEON build removes Intel IPP.
