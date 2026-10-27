@@ -1,3 +1,5 @@
+About 3× faster than the original repository.
+
 ## Performance improvements
 
 - Full 8-minute reference run reduced from 381.61 s to 115.20 s (3.31×).
