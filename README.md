@@ -4,6 +4,18 @@ A high quality audio limiter and an automated mastering algorithm written in C++
 
 The limiter and automated mastering engine used by Onatsu Bakuage-kun.
 
+## Improvements in this fork
+
+- Native Apple Silicon CMake build with Accelerate and NEON; no Intel IPP.
+- Real-FFT backend replaces the complex FFT on real input (2.16× faster full-file).
+- Exact source-spectrum cache is on by default, with a RAM guard (1.35× more).
+- Fully static arm64 binaries need no Conda or Homebrew at runtime.
+- Default C++26 build using GCC 16, which supports contracts, `<inplace_vector>` and `<simd>`.
+- Boost 1.92 with Process v1 and Filesystem v4 compatibility.
+- Reproducible macOS build scripts and a compressed reference WAV.
+- Deep performance audit plus Metal, ANE, AMX and compiler-flag benchmarks.
+- Audio preserved: the cache is bit-identical and compiler differences are rounding-only.
+
 ## FFT library performance comparison
 
 - Libraries: IPP 2021.9.0 / 2026.1.0, FFTW 3.3.10, PFFFT, PocketFFT, and Rust's RealFFT 3.5.0 (RustFFT 6.4.1).
